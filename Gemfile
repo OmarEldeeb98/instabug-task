@@ -60,6 +60,8 @@ group :development do
   # gem "spring"
 
   gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
+  gem "annotate"
+  gem 'byebug', '10.0.0', platforms: [:mri, :mingw, :x64_mingw]
 end
 
 group :test do

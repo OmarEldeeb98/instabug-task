@@ -18,7 +18,7 @@ services:
     command: bundle exec rails s -p  3000 -b '0.0.0.0'
     restart: always
     volumes:
-      - ".:/app"
+      - .:/home/rails
     ports:
       - "3001:3000"
     depends_on:

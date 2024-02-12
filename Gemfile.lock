@@ -86,7 +86,6 @@ GEM
     bootsnap (1.18.3)
       msgpack (~> 1.2)
     builder (3.2.4)
-    byebug (10.0.0)
     capybara (3.40.0)
       addressable
       matrix

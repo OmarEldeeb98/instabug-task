@@ -23,11 +23,13 @@ services:
       - "3001:3000"
     depends_on:
       - db
+      - redis
     environment:
       DB_USER: user
       DB_NAME: app
       DB_PASSWORD: password
       DB_HOST: db
+      REDIS_URL: redis://redis:6379
     networks:
       - app-network
 

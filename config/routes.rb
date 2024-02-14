@@ -8,6 +8,16 @@ Rails.application.routes.draw do
   resources :applications, only: [:create] do
     get "show", on: :collection
     put "update", on: :collection
+    get "chats", on: :member
+  end
+
+  resources :chats, only: [:create] do
+    get "show", on: :collection
+  end
+
+  resources :messages, only: [:create] do
+    get "show", on: :collection
+    put "update", on: :collection
   end
 
   # Defines the root path route ("/")

@@ -33,7 +33,7 @@ en:
   message_created: "Message created successfully"
   application_updated: "Application updated successfully"
   chat_created: "Chat updated successfully"
-  message_created: "Message updated successfully"
+  message_updated: "Message updated successfully"
   data_loaded: "Data loaded successfully"
   bad_request: "Bad request"
   creation_failed: "Creation failed"

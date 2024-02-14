@@ -1,10 +1,11 @@
 class ApplicationsController < ApplicationController
-  before_action :set_application, only: [:update, :show]
+  before_action :set_application, only: [:update, :show, :chats]
   before_action :validate_application_params, only: [:update, :create]
 
   def create
     application = Application.new(application_params)
     if application.save
+      Redis.set(application.token,0)
       response_json(
         message:I18n.t("application_created"),
         status: :created,
@@ -35,7 +36,7 @@ class ApplicationsController < ApplicationController
       response_json_error(
         status: :bad_request,
         title:I18n.t("bad_request"),
-        message: I18n.t("creation_failed"),
+        message: I18n.t("updating_failed"),
         extra: {:errors => @application.errors}
       )
     end
@@ -46,15 +47,16 @@ class ApplicationsController < ApplicationController
     response_json(message:I18n.t("data_loaded"), data: data, status: :ok)
   end
 
+  def chats
+    data = @application.chats.pluck(:chat_number)
+    response_json(message:I18n.t("data_loaded"), data: data, status: :ok)
+  end
+
   private
 
   def set_application
-    @application = Application.find_by(token: params[:token])
-    response_json_error(
-      status: :not_found,
-      title:I18n.t("bad_request"),
-      message: I18n.t("record_not_found"),
-    ) unless @application
+    @application = Application.find_by!(token: params[:id]) if params[:id]
+    @application ||= Application.find_by!(token: params[:token]) if params[:token]
   end
 
   def validate_application_params

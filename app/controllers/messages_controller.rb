@@ -1,7 +1,8 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update]
   before_action :set_chat_id, only: [:create]
-  before_action :validate_message_params, only: [:create, :update]
+  before_action :validate_create_message_params, only: [:create]
+  before_action :validate_update_message_params, only: [:update]
   before_action :validate_show_message_params, only: [:show]
 
   def create

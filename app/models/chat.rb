@@ -10,6 +10,10 @@
 #  application_id :bigint
 #
 class Chat < ApplicationRecord
+
+  validates :chat_number, presence: true, uniqueness: { scope: :application_id }
+
+
   belongs_to :application
   has_many :messages
 end

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :messages, only: [:create] do
     get "show", on: :collection
     put "update", on: :collection
+    get "search", on: :collection
   end
 
   # Defines the root path route ("/")

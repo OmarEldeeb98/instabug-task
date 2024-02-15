@@ -7,7 +7,7 @@ class ChatsController < ApplicationController
   def create
     if Redis.exists?(params[:application_token])
       chat_number = Redis.incr(params[:application_token])
-      Redis.set("#{params[:application_token]}-#{chat_number}",0)
+      Redis.set("#{params[:application_token]}##{chat_number}",0)
       chat = Chat.new(chat_number: chat_number, application_id: @application_id)
       chat.save
       response_json(

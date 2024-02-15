@@ -29,7 +29,7 @@ class Message < ApplicationRecord
       query: {
         bool: {
           must: [
-            { match: { body: text } }
+            { wildcard: { body: "*#{text}*" } }
           ],
           filter: [
             { term: { chat_id: chat_id } }

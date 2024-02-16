@@ -15,7 +15,7 @@ services:
 
   app:
     build: .
-    command: bundle exec rails s -p  3000 -b '0.0.0.0'
+    command: ["./bin/rails", "server", "-p", "3000", "-b", "0.0.0.0"]
     restart: always
     volumes:
       - .:/home/rails
@@ -60,6 +60,24 @@ services:
     restart: always
     ports:
       - 9200:9200
+    networks:
+      - app-network
+
+  sidekiq:
+    depends_on:
+      - 'redis'
+      - 'db'
+    build: .
+    restart: always
+    command: bundle exec sidekiq
+    volumes:
+      - .:/home/rails
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DB_USER=user
+      - DB_NAME=app
+      - DB_PASSWORD=password
+      - DB_HOST=db
     networks:
       - app-network
 

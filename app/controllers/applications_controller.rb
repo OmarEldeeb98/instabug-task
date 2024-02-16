@@ -5,7 +5,8 @@ class ApplicationsController < ApplicationController
   def create
     application = Application.new(application_params)
     if application.save
-      Redis.set(application.token,0)
+      Redis.set("app##{application.token}",0)
+      CountersUpdater.perform_async()
       response_json(
         message:I18n.t("application_created"),
         status: :created,

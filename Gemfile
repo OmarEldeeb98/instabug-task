@@ -46,6 +46,9 @@ gem "redis"
 gem "elasticsearch"
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
+gem 'sidekiq'
+gem 'sidekiq-scheduler'
+gem 'sidekiq-unique-jobs'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

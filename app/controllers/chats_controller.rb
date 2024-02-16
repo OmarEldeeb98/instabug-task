@@ -5,11 +5,10 @@ class ChatsController < ApplicationController
   before_action :validate_show_chat_params, only: [:show]
 
   def create
-    if Redis.exists?(params[:application_token])
-      chat_number = Redis.incr(params[:application_token])
-      Redis.set("#{params[:application_token]}##{chat_number}",0)
-      chat = Chat.new(chat_number: chat_number, application_id: @application_id)
-      chat.save
+    if Redis.exists?("app##{params[:application_token]}")
+      chat_number = Redis.incr("app##{params[:application_token]}")
+      Redis.set("chat##{params[:application_token]}##{chat_number}",0)
+      ChatCreator.perform_async(chat_number, @application_id)
       response_json(
         message:I18n.t("chat_created"),
         status: :created,

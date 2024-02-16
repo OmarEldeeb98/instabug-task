@@ -7,10 +7,9 @@ class MessagesController < ApplicationController
   before_action :set_chat_id, only: [:create, :search]
 
   def create
-    if Redis.exists?("#{params[:application_token]}##{params[:chat_number]}")
-      message_number = Redis.incr("#{params[:application_token]}##{params[:chat_number]}")
-      message = Message.new(message_params.merge({message_number: message_number, chat_id: @chat_id}))
-      message.save!
+    if Redis.exists?("chat##{params[:application_token]}##{params[:chat_number]}")
+      message_number = Redis.incr("chat##{params[:application_token]}##{params[:chat_number]}")
+      MessageCreator.perform_async(message_params.merge({message_number: message_number, chat_id: @chat_id}).to_h)
       response_json(
         message:I18n.t("chat_created"),
         status: :created,
@@ -92,6 +91,8 @@ class MessagesController < ApplicationController
 
   def set_chat_id
     application_id = Application.find_by!(token: params[:application_token]).id
+    puts application_id
+    puts params[:chat_number] 
     @chat_id = Chat.find_by!(application_id: application_id, chat_number: params[:chat_number]).id
   end
 

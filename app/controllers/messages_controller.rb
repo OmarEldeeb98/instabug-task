@@ -1,14 +1,11 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update]
-  before_action :validate_create_message_params, only: [:create]
-  before_action :validate_update_message_params, only: [:update]
-  before_action :validate_show_message_params, only: [:show]
-  before_action :validate_search_message_params, only: [:search]
+  before_action :validate_message_params, only: [:create, :update, :search]
   before_action :set_chat_id, only: [:create, :search]
 
   def create
-    if Redis.exists?("chat##{params[:application_token]}##{params[:chat_number]}")
-      message_number = Redis.incr("chat##{params[:application_token]}##{params[:chat_number]}")
+    if Redis.exists?("chat##{params[:application_id]}##{params[:chat_id]}")
+      message_number = Redis.incr("chat##{params[:application_id]}##{params[:chat_id]}")
       MessageCreator.perform_async(message_params.merge({message_number: message_number, chat_id: @chat_id}).to_h)
       response_json(
         message:I18n.t("chat_created"),
@@ -48,52 +45,29 @@ class MessagesController < ApplicationController
   end
 
   def search
-    result = Message.search(params[:content], @chat_id)
+    result = Message.search(params[:body], @chat_id)
     response_json(message:I18n.t("data_loaded"), data: result, status: :ok)
   end
 
   private
 
   def set_message
-    application_id = Application.find_by!(token: params[:application_token]).id
-    chat_id = Chat.find_by!(application_id: application_id, chat_number: params[:chat_number]).id
-    @message = Message.find_by!(chat_id: chat_id, message_number: params[:message_number])
+    application_id = Application.find_by!(token: params[:application_id]).id
+    chat_id = Chat.find_by!(application_id: application_id, chat_number: params[:chat_id]).id
+    @message = Message.find_by!(chat_id: chat_id, message_number: params[:id])
   end
 
   def message_params
     params.permit(:body)
   end
 
-  def validate_create_message_params
+  def validate_message_params
     param! :body, String, blank: false, required: true
-    param! :application_token, String, blank: false, required: true
-    param! :chat_number, String, blank: false, required: true
-  end
-
-  def validate_update_message_params
-    param! :message_number, String, blank: false, required: true
-    param! :body, String, blank: false, required: true
-    param! :application_token, String, blank: false, required: true
-    param! :chat_number, String, blank: false, required: true
-  end
-
-  def validate_show_message_params
-    param! :message_number, String, blank: false, required: true
-    param! :application_token, String, blank: false, required: true
-    param! :chat_number, String, blank: false, required: true
-  end
-
-  def validate_search_message_params
-    param! :content, String, blank: false, required: true
-    param! :application_token, String, blank: false, required: true
-    param! :chat_number, String, blank: false, required: true
   end
 
   def set_chat_id
-    application_id = Application.find_by!(token: params[:application_token]).id
-    puts application_id
-    puts params[:chat_number] 
-    @chat_id = Chat.find_by!(application_id: application_id, chat_number: params[:chat_number]).id
+    application_id = Application.find_by!(token: params[:application_id]).id
+    @chat_id = Chat.find_by!(application_id: application_id, chat_number: params[:chat_id]).id
   end
 
 end

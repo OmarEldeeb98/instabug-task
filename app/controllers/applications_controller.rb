@@ -48,16 +48,11 @@ class ApplicationsController < ApplicationController
     response_json(message:I18n.t("data_loaded"), data: data, status: :ok)
   end
 
-  def chats
-    data = @application.chats.pluck(:chat_number)
-    response_json(message:I18n.t("data_loaded"), data: data, status: :ok)
-  end
 
   private
 
   def set_application
-    @application = Application.find_by!(token: params[:id]) if params[:id]
-    @application ||= Application.find_by!(token: params[:token]) if params[:token]
+    @application = Application.find_by!(token: params[:id])
   end
 
   def validate_application_params

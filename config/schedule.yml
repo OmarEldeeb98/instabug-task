@@ -1,0 +1,4 @@
+update_counters_job:
+  cron: "*/1 * * * *" # This will run the job every  40 minutes
+  class: "CountersUpdater"
+  queue: default

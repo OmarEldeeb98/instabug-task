@@ -3,6 +3,8 @@ services:
   db:
     image: mysql:latest
     restart: always
+    volumes:
+      - ./database_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: app
@@ -88,3 +90,4 @@ networks:
 
 volumes:
   es:
+  db:

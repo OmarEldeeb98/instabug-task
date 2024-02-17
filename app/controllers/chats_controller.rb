@@ -1,6 +1,6 @@
 class ChatsController < ApplicationController
-  before_action :set_chat, only: [:show, :create]
-  before_action :set_application, only: [:index]
+  before_action :set_chat, only: [:show]
+  before_action :set_application, only: [:index, :create]
 
   def create
     if Redis.exists?("app##{params[:application_id]}")

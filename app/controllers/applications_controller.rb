@@ -1,5 +1,5 @@
 class ApplicationsController < ApplicationController
-  before_action :set_application, only: [:update, :show, :chats]
+  before_action :set_application, only: [:update, :show]
   before_action :validate_application_params, only: [:update, :create]
 
   def create

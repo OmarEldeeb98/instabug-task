@@ -16,4 +16,12 @@ module ErrorResponseActions
       message: I18n.t("page_not_found"),
     )
   end
+
+  def internal_server_error
+    response_json_error(
+      status: 500,
+      title:I18n.t("bad_request"),
+      message: I18n.t("something_bad_happened"),
+    )
+  end
 end

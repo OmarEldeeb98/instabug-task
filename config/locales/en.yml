@@ -42,3 +42,4 @@ en:
   page_not_found: "Page not found"
   resource_not_found: "Resource not found"
   something_bad_happened: "Something Bad Happened"
+  check_params: "Check API params"

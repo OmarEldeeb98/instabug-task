@@ -17,6 +17,13 @@ module ErrorResponseActions
     )
   end
 
+  def bad_request
+    response_json_error(
+      status: :bad_request,
+      title:I18n.t("bad_request"),
+      message: I18n.t("check_params"),
+    )
+  end
   def internal_server_error
     response_json_error(
       status: 500,
